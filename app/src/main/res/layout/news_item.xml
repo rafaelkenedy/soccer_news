@@ -67,6 +67,10 @@
 
         <ImageView
             android:id="@+id/ivFavorite"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="4dp"
+            android:background="?selectableItemBackgroundBorderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/default_margin"
@@ -79,6 +83,10 @@
 
         <ImageView
             android:id="@+id/ivShare"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:padding="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/default_margin"
