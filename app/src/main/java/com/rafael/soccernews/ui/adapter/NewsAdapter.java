@@ -3,6 +3,7 @@ package com.rafael.soccernews.ui.adapter;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -17,9 +18,12 @@ import java.util.List;
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     private List<News> news;
+    private final View.OnClickListener favoriteListener;
 
-    public NewsAdapter(List<News> news){
+    public NewsAdapter(List<News> news, View.OnClickListener favoriteListener){
+
         this.news = news;
+        this.favoriteListener = favoriteListener;
     }
 
     @NonNull
@@ -50,6 +54,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             intent.putExtra(Intent.EXTRA_TEXT, news.getLink());
             holder.itemView.getContext().startActivity(Intent.createChooser(intent, "Share"));
         });
+
+        holder.binding.ivFavorite.setOnClickListener(this.favoriteListener);
 
     }
 
