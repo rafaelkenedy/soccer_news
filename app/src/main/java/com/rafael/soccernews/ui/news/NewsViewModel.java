@@ -1,9 +1,13 @@
 package com.rafael.soccernews.ui.news;
 
+import android.app.Application;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.room.Room;
 
+import com.rafael.soccernews.data.local.AppDatabase;
 import com.rafael.soccernews.data.remote.SoccerNewsApi;
 import com.rafael.soccernews.domain.News;
 
@@ -28,6 +32,7 @@ public class NewsViewModel extends ViewModel {
                 .build();
 
         api = retrofit.create(SoccerNewsApi.class);
+
         this.findNews();
     }
 
