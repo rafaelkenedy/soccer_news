@@ -1,5 +1,6 @@
 package com.rafael.soccernews.ui.adapter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rafael.soccernews.R;
 import com.rafael.soccernews.databinding.NewsItemBinding;
 import com.rafael.soccernews.domain.News;
 import com.squareup.picasso.Picasso;
@@ -37,21 +39,25 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+        final Context context = holder.itemView.getContext();
+
         News news = this.news.get(position);
         holder.binding.tvTitle.setText(news.getTitle());
         holder.binding.tvDescription.setText(news.getDescription());
         Picasso.get().load(news.getImage()).into(holder.binding.ivThumbnail);
+
         holder.binding.btOpenlink.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(news.getLink()));
-            holder.itemView.getContext().startActivity(intent);
+            context.startActivity(intent);
 
         });
         holder.binding.ivShare.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT, news.getLink());
-            holder.itemView.getContext().startActivity(Intent.createChooser(intent, "Share"));
+            context.startActivity(Intent.createChooser(intent, "Share"));
         });
 
         holder.binding.ivFavorite.setOnClickListener(view -> {
@@ -59,6 +65,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             this.favoriteListener.onFavorite(news);
             notifyItemChanged(position);
         });
+
+        if(news.isFavorite()){
+            holder.binding.ivFavorite.setColorFilter(context.getResources().getColor(R.color.favorite_active));
+        } else {
+            holder.binding.ivFavorite.setColorFilter(context.getResources().getColor(R.color.favorite_inactive));
+        }
 
     }
 
