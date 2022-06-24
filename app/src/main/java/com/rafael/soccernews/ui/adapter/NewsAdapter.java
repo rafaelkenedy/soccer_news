@@ -43,30 +43,30 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         final Context context = holder.itemView.getContext();
 
         News news = this.news.get(position);
-        holder.binding.tvTitle.setText(news.getTitle());
-        holder.binding.tvDescription.setText(news.getDescription());
-        Picasso.get().load(news.getImage()).into(holder.binding.ivThumbnail);
+        holder.binding.tvTitle.setText(news.title);
+        holder.binding.tvDescription.setText(news.description);
+        Picasso.get().load(news.image).into(holder.binding.ivThumbnail);
 
         holder.binding.btOpenlink.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(news.getLink()));
+            intent.setData(Uri.parse(news.link));
             context.startActivity(intent);
 
         });
         holder.binding.ivShare.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT, news.getLink());
+            intent.putExtra(Intent.EXTRA_TEXT, news.link);
             context.startActivity(Intent.createChooser(intent, "Share"));
         });
 
         holder.binding.ivFavorite.setOnClickListener(view -> {
-            news.setFavorite(!news.isFavorite());
+            news.favorite = !news.favorite;
             this.favoriteListener.onFavorite(news);
             notifyItemChanged(position);
         });
 
-        if(news.isFavorite()){
+        if(news.favorite){
             holder.binding.ivFavorite.setColorFilter(context.getResources().getColor(R.color.favorite_active));
         } else {
             holder.binding.ivFavorite.setColorFilter(context.getResources().getColor(R.color.favorite_inactive));
