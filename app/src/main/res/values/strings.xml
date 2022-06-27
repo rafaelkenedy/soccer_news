@@ -6,4 +6,5 @@
     <string name="cd_favorite_image">Favorite image</string>
     <string name="cd_news_img">News Image</string>
     <string name="open_link">Open link</string>
+    <string name="error_network">Network Error!</string>
 </resources>

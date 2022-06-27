@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.rafael.soccernews.MainActivity;
+import com.rafael.soccernews.R;
 import com.rafael.soccernews.databinding.FragmentNewsBinding;
 import com.rafael.soccernews.ui.adapter.NewsAdapter;
 
@@ -28,7 +30,7 @@ public class NewsFragment extends Fragment {
         return root;
     }
 
-    private void loadNews() {
+    public void loadNews() {
         NewsViewModel newsViewModel = new ViewModelProvider(this).get(NewsViewModel.class);
         binding.rvNews.setLayoutManager(new LinearLayoutManager(getContext()));
         newsViewModel.getNews().observe(getViewLifecycleOwner(), news -> {
@@ -37,18 +39,25 @@ public class NewsFragment extends Fragment {
             }));
         });
 
+        setupStates(newsViewModel);
+
+        binding.srlNews.setOnRefreshListener(() -> {
+            loadNews();
+        });
+    }
+
+    public void setupStates(NewsViewModel newsViewModel) {
         newsViewModel.getState().observe(getViewLifecycleOwner(), state -> {
             switch (state) {
                 case DOING:
-                    //TODO Iniciar SwipeRefreshLayout (loaindg)
+                    binding.srlNews.setRefreshing(true);
                     break;
                 case DONE:
-                    //TODO Finalizar SwipeRefreshLayout (loaindg)
+                    binding.srlNews.setRefreshing(false);
                     break;
                 case ERROR:
-                    //TODO
-                    //TODO Finalizar SwipeRefreshLayout (loaindg)
-                    //TODO Mostrar erro genérico
+                    binding.srlNews.setRefreshing(false);
+                    Snackbar.make(binding.srlNews, R.string.error_network, Snackbar.LENGTH_SHORT).show();
             }
         });
     }
