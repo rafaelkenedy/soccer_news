@@ -17,7 +17,7 @@ Soccer News
 Read your news and add to favorites
 
 <div align="center">
-  <img src="cover.png" width="700" /> 
+  <img src="cover.png" width="300" /> 
 </div>
 
 <br>
