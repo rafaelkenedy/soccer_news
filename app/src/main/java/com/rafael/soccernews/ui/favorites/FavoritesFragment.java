@@ -22,11 +22,11 @@ import java.util.List;
 public class FavoritesFragment extends Fragment {
 
     private FragmentFavoritesBinding binding;
+    private FavoritesViewModel favoritesViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        FavoritesViewModel favoritesViewModel =
-                new ViewModelProvider(this).get(FavoritesViewModel.class);
+        favoritesViewModel = new ViewModelProvider(this).get(FavoritesViewModel.class);
 
         binding = FragmentFavoritesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -38,16 +38,13 @@ public class FavoritesFragment extends Fragment {
     }
 
     private void loadFavoriteNews() {
-        MainActivity activity = (MainActivity) getActivity();
-        List<News> favoriteNews = activity.getDb().newsDao().loadFavoriteNews();
-        binding.rvNews.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.rvNews.setAdapter(new NewsAdapter(favoriteNews, updateNews -> {
-            if(activity != null ){
-                //AsyncTask.execute(() -> activity.getDb().newsDao().insert(updateNews));
-                activity.getDb().newsDao().insert(updateNews);
-            }
-            loadFavoriteNews();
-        }));
+        favoritesViewModel.loadFavoriteNews().observe(getViewLifecycleOwner(), localNews -> {
+            binding.rvNews.setLayoutManager(new LinearLayoutManager(getContext()));
+            binding.rvNews.setAdapter(new NewsAdapter(localNews, updateNews -> {
+                favoritesViewModel.saveNews(updateNews);
+                loadFavoriteNews();
+            }));
+        });
     }
 
     @Override
